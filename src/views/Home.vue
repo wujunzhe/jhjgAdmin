@@ -1,18 +1,70 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <el-container>
+      <el-aside>
+        <logo-title></logo-title>
+        <admin-menu></admin-menu>
+      </el-aside>
+      <el-main>
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ titleName }}</el-breadcrumb-item>
+        </el-breadcrumb>
+        <el-divider></el-divider>
+        <el-card class="box-card">
+          <div class="text item">
+              <router-view></router-view>
+          </div>
+        </el-card>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import adminMenu from "../components/AdminMenu/index.vue";
+import logoTitle from "../components/Logo/index.vue";
 export default {
-  name: 'Home',
+  name: "Home",
+  data() {
+    return {
+      titleName: "",
+    };
+  },
+  created() {},
   components: {
-    HelloWorld
+    adminMenu,
+    logoTitle,
+  },
+  watch:{
+    $route(to,from){
+      if(to.path !== from.path) {
+        const {meta} = to;
+        const {name} = meta;
+        this.titleName = name;
+      }
+    }
+  }
+};
+</script>
+
+<style lang="less" scoped>
+.home {
+  height: 100vh;
+  .el-container {
+    height: 100%;
+    .el-aside {
+      width: 200px;
+      background-color: #545c64;
+    }
+    .el-main {
+      .el-breadcrumb {
+        margin-top: 20px;
+      }
+      .box-card {
+        margin-top: 50px;
+      }
+    }
   }
 }
-</script>
+</style>

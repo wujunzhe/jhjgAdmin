@@ -1,27 +1,61 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import store from '@/store/index';
+
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+const routes = [{
+        path: '/',
+        redirect: '/home'
+    },
+    {
+        path: '/home',
+        name: 'Home',
+        component: () =>
+            import ('../views/Home.vue'),
+        redirect: '/home/tableList',
+        children: [{
+                path: 'tableList',
+                name: 'TableList',
+                component: () =>
+                    import ('../views/TableManage/index.vue'),
+                meta: {
+                    name: '餐桌管理'
+                }
+            },
+            {
+                path: 'orderList',
+                name: 'OrderList',
+                component: () =>
+                    import ('../views/OrderManage/index.vue'),
+                meta: {
+                    name: '订单管理'
+                }
+            },
+        ]
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: () =>
+            import ('../views/Login/index.vue')
+    },
 ]
 
 const router = new VueRouter({
-  routes
+    routes
+})
+
+router.beforeEach((to, from, next) => {
+    const token = store.state.token;
+    if (to.path !== '/login' && !token) {
+        next({
+            name: 'Login'
+        })
+    } else {
+        next()
+    }
 })
 
 export default router
