@@ -22,11 +22,15 @@ const editTable = params => post('/order/table/update', params);
 /** 删除餐桌 */
 const deleteTable = params => post('/order/table/delete', params);
 
+/** 上架餐桌 */
+const useTable = params => post('/order/table/use', params);
+
 export {
     loginReq,
     queryTableList,
     queryOrderList,
     addTable,
     editTable,
-    deleteTable
+    deleteTable,
+    useTable
 }

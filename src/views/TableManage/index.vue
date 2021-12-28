@@ -23,8 +23,11 @@
           <el-button type="text" size="small" @click="editTable(scope.row)"
             >修改</el-button
           >
+          <el-button type="text" size="small" @click="tableOn(scope.row)"
+            >上架</el-button
+          >
           <el-button type="text" size="small" @click="del(scope.row)"
-            >删除</el-button
+            >下架</el-button
           >
         </template>
       </el-table-column>
@@ -91,6 +94,7 @@ import {
   editTable,
   queryOrderList,
   deleteTable,
+  useTable,
 } from "../../api/api";
 export default {
   name: "tableManage",
@@ -167,6 +171,17 @@ export default {
       }
     },
 
+    async tableOn(table) {
+      const ids = [table.id];
+      const res = await useTable({ ids });
+      if (res.code === "00000") {
+        this.$message.success("上架成功");
+        this.getTableList();
+      } else {
+        this.$message.error(res.msg);
+      }
+    },
+
     async del(table) {
       // 查询是否有订单
       const { data: orderList } = await queryOrderList();
@@ -178,7 +193,7 @@ export default {
         this.delTable(table.id);
       }
     },
-
+    
     async delTable(tId) {
       const ids = [tId];
       const res = await deleteTable({ ids });

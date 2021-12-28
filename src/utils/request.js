@@ -1,7 +1,7 @@
 import axios from 'axios';
 import QS from 'qs'
 import store from '@/store/index';
-axios.defaults.baseURL = 'http://47.107.49.39/order';
+axios.defaults.baseURL = 'https://jiuhaojiuguan.cn/order';
 axios.defaults.timeout = 10000;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 axios.interceptors.request.use(
