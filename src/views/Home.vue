@@ -24,6 +24,7 @@
 <script>
 import adminMenu from "../components/AdminMenu/index.vue";
 import logoTitle from "../components/Logo/index.vue";
+import {refreshAuth} from '../api/api.js';
 export default {
   name: "Home",
   data() {
@@ -31,7 +32,18 @@ export default {
       titleName: "",
     };
   },
-  created() {},
+  created() {
+    this.refresh();
+  },
+  methods: {
+    async refresh() {
+      const res = await refreshAuth();
+      if(res.code==="A0300" && res.msg === "访问权限异常") {
+        this.$removeData('token');
+        this.$router.push('/login');
+      }
+    }
+  },
   components: {
     adminMenu,
     logoTitle,

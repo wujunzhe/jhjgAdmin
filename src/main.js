@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import { getData, setData } from './utils/storage'
+import { getData, setData, removeData } from './utils/storage'
 
 /** elementUI */
 import ElementUI from 'element-ui';
@@ -17,6 +17,7 @@ Vue.use(ElementUI);
 Vue.prototype.$md5 = MD5;
 Vue.prototype.$setData = setData;
 Vue.prototype.$getData = getData;
+Vue.prototype.$removeData = removeData;
 Vue.config.productionTip = false
 
 new Vue({

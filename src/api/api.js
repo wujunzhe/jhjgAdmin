@@ -25,6 +25,9 @@ const deleteTable = params => post('/order/table/delete', params);
 /** 上架餐桌 */
 const useTable = params => post('/order/table/use', params);
 
+/** 刷新权限 */
+const refreshAuth = params => get('/refreshApi', params);
+
 export {
     loginReq,
     queryTableList,
@@ -32,5 +35,6 @@ export {
     addTable,
     editTable,
     deleteTable,
-    useTable
+    useTable,
+    refreshAuth
 }

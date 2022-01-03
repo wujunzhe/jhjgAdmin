@@ -1,6 +1,6 @@
 <template>
   <div class="order-manage">
-    <el-table :data="tableData" border style="width: 100%">
+    <el-table :data="tableData" border style="width: 100%" stripe>
       <el-table-column prop="tableName" label="桌名" width="120" align="center">
       </el-table-column>
       <el-table-column
@@ -32,12 +32,11 @@
         label="备注"
         align="center"
       ></el-table-column>
-      <el-table-column fixed="right" label="操作" width="100">
+      <el-table-column fixed="right" label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-button @click="handleClick(scope.row)" type="text" size="small"
             >查看</el-button
           >
-          <el-button type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>

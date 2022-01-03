@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login-box">
-      <div class="title">Login</div>
+      <div class="title">管理系统</div>
       <el-form
         :model="loginForm"
         :rules="rules"
@@ -11,10 +11,10 @@
         class="login-form"
       >
         <el-form-item label="用户名" prop="usrName">
-          <el-input v-model="loginForm.usrName"></el-input>
+          <el-input v-model="loginForm.usrName" clearable></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="loginForm.password" type="password"></el-input>
+          <el-input v-model="loginForm.password" type="password" clearable show-password></el-input>
         </el-form-item>
         <el-button type="primary" @click="submitForm()">登陆</el-button>
       </el-form>
@@ -24,7 +24,7 @@
 
 <script>
 import { loginReq } from "../../api/api";
-import {mapMutations} from 'vuex';
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -39,7 +39,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(['setToken']),
+    ...mapMutations(["setToken"]),
     submitForm() {
       this.$refs.loginFormRef.validate(async (valid) => {
         if (valid) {
@@ -54,13 +54,12 @@ export default {
             const { data } = res;
             const { token } = data;
             this.$setData("token", token);
-            this.$store.commit('setToken',token)
-            this.$router.push('/home/tableList');
+            this.$store.commit("setToken", token);
+            this.$router.push("/home/tableList");
+          } else {
+            this.$message.error(res.msg);
+            return false;
           }
-        } else {
-          this.$message.error(res.message);
-          console.log("error submit!!");
-          return false;
         }
       });
     },
@@ -72,7 +71,17 @@ export default {
 .login {
   height: 100vh;
   width: 100vw;
-  background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  &::before {
+    content: "";
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: url("../../assets/login.jpg") no-repeat;
+    background-size: cover;
+    filter: blur(5px);
+  }
   .title {
     text-align: center;
     position: absolute;
@@ -81,22 +90,39 @@ export default {
     transform: translateX(-50%);
     font-size: 36px;
     font-weight: 700;
-    color: #6f86d6
+    color: #f7f7f7;
   }
   .login-box {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 50%;
-    height: 15%;
-    background-color: rgba(93, 90, 91, 0.1);
+    width: 480px;
+    height: 300px;
+    background-color: rgba(25, 12, 14, 0.5);
     border-radius: 20px;
     box-shadow: 15px 5px 10px rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
+    .el-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      /deep/ .el-form-item {
+        width: 100%;
+        text-align: center;
+        .el-form-item__label {
+          text-align-last: left;
+          color: #f7f7f7;
+        }
+        .el-form-item__content {
+          width: 50%;
+        }
+      }
+    }
     .el-button {
-      width: 120px;
+      width: 80%;
       margin-left: 20px;
     }
   }

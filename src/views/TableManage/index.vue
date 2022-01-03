@@ -18,7 +18,7 @@
       >
       </el-table-column>
       <el-table-column prop="address" label="备注"> </el-table-column>
-      <el-table-column fixed="right" label="操作" width="100" align="center">
+      <el-table-column fixed="right" label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="editTable(scope.row)"
             >修改</el-button
@@ -48,7 +48,7 @@
     </div>
 
     <!-- 添加餐桌对话框 -->
-    <el-dialog title="餐桌信息" width="30%" :visible="addTableDialogVisible">
+    <el-dialog title="餐桌信息" width="30%"  :show-close="false" :visible="addTableDialogVisible">
       <el-form :model="addTableForm">
         <el-form-item label="桌名" :label-width="formLabelWidth">
           <el-input v-model="addTableForm.name" autocomplete="off"></el-input>
@@ -67,7 +67,7 @@
     </el-dialog>
 
     <!-- 修改餐桌对话框 -->
-    <el-dialog title="餐桌信息" width="30%" :visible="editTableDialogVisible">
+    <el-dialog title="餐桌信息" width="30%" :show-close="false" :visible="editTableDialogVisible">
       <el-form :model="editTableForm">
         <el-form-item label="桌名" :label-width="formLabelWidth">
           <el-input v-model="editTableForm.name" autocomplete="off"></el-input>
