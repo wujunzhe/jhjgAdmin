@@ -15,6 +15,18 @@
         width="120"
         align="center"
       ></el-table-column>
+      <el-table-column
+        prop="menuName"
+        label="套餐名"
+        width="180"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="orderPrice"
+        label="订单价格"
+        width="120"
+        align="center"
+      ></el-table-column>
       <el-table-column label="订单创建时间" width="240" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | getTime }}</span>
@@ -24,17 +36,34 @@
         <template slot-scope="scope">
           <el-tag type="success" v-if="scope.row.isPay === 1">已支付</el-tag>
           <el-tag type="info" v-if="scope.row.isPay === 0">待支付</el-tag>
-          <el-tag type="warning" v-if="scope.row.isPay === 2">退款处理中</el-tag>
+          <el-tag type="warning" v-if="scope.row.isPay === 2"
+            >退款处理中</el-tag
+          >
+          <el-tag type="warning" v-if="orderTableForm.isPay === 3"
+            >支付处理中</el-tag
+          >
         </template>
       </el-table-column>
-            <el-table-column
+      <el-table-column
+        prop="refundReason"
+        label="退款原因"
+        width="120"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="refuseReason"
+        label="退款拒绝原因"
+        width="120"
+        align="center"
+      ></el-table-column>
+      <el-table-column
         prop="remark"
         label="备注"
         align="center"
       ></el-table-column>
       <el-table-column fixed="right" label="操作" width="100" align="center">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small"
+          <el-button @click="showOrderInfo(scope.row)" type="text" size="small"
             >查看</el-button
           >
         </template>
@@ -54,6 +83,69 @@
       >
       </el-pagination>
     </div>
+    <!-- 查看订单对话框 -->
+    <el-dialog
+      title="订单信息"
+      width="40%"
+      :show-close="false"
+      :visible="orderTableDialogVisible"
+    >
+      <el-form :model="orderTableForm" disabled>
+        <el-form-item label="桌名:" :label-width="formLabelWidth">
+          <el-input
+            v-model="orderTableForm.tableName"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="预定时段:" :label-width="formLabelWidth">
+          <el-input
+            v-model="orderTableForm.orderType"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="预定日期:" :label-width="formLabelWidth">
+          <el-input
+            v-model="orderTableForm.orderDate"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="套餐名:" :label-width="formLabelWidth">
+          <el-input
+            v-model="orderTableForm.menuName"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="订单价格:" :label-width="formLabelWidth">
+          <el-input
+            v-model="orderTableForm.orderPrice"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="支付状态:" :label-width="formLabelWidth">
+          <el-tag type="success" v-if="orderTableForm.isPay === 1"
+            >已支付</el-tag
+          >
+          <el-tag type="info" v-if="orderTableForm.isPay === 0">待支付</el-tag>
+          <el-tag type="warning" v-if="orderTableForm.isPay === 2"
+            >退款处理中</el-tag
+          >
+          <el-tag type="warning" v-if="orderTableForm.isPay === 3"
+            >支付处理中</el-tag
+          >
+        </el-form-item>
+        <el-form-item label="退款原因:" :label-width="formLabelWidth">
+          <el-input
+            v-model="orderTableForm.refuseReason"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="orderTableDialogVisible = false"
+          >关 闭</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -68,6 +160,13 @@ export default {
       pageTotal: 0,
       currentPage: 1,
       pageSize: 10,
+      orderTableDialogVisible: false,
+      orderTableForm: {
+        tableName: "",
+        orderType: "",
+        orderDate: "",
+        isPay: "",
+      },
     };
   },
   created() {
@@ -95,6 +194,10 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       this.getOrderList();
+    },
+    showOrderInfo(info) {
+      this.orderTableForm = info;
+      this.orderTableDialogVisible = true;
     },
   },
   filters: {

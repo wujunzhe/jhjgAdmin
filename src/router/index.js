@@ -50,6 +50,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     const token = store.state.token;
     if (to.path !== '/login' && !token) {
+        document.title = '登陆';
         next({
             name: 'Login'
         })

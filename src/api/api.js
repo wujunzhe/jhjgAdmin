@@ -25,6 +25,15 @@ const deleteTable = params => post('/order/table/delete', params);
 /** 上架餐桌 */
 const useTable = params => post('/order/table/use', params);
 
+/** 按时间段禁用餐桌 */
+const disableTable = params => post('/order/table/off', params);
+
+/** 查询一周内餐桌禁用情况 */
+const getTableOffList = params => get('/order/table/offList', params);
+
+/** 按时间段启用餐桌 */
+const enableTable = params => post('/order/table/enable', params);
+
 /** 刷新权限 */
 const refreshAuth = params => get('/refreshApi', params);
 
@@ -36,5 +45,8 @@ export {
     editTable,
     deleteTable,
     useTable,
-    refreshAuth
+    refreshAuth,
+    disableTable,
+    getTableOffList,
+    enableTable
 }
