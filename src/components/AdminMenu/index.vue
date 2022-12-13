@@ -28,12 +28,12 @@ export default {
   name: "adminMenu",
   data() {
     return {
-      menuPath: "",
+      menuPath: '',
       menuList: [
         {
-          toPath: "/home/tableList",
-          icon: "el-icon-s-platform",
-          title: "餐桌管理",
+          toPath: '/home/tableList',
+          icon: 'el-icon-s-platform',
+          title: '餐桌管理',
         },
         {
           toPath: "/home/orderList",

@@ -61,11 +61,13 @@
         label="备注"
         align="center"
       ></el-table-column>
-      <el-table-column fixed="right" label="操作" width="100" align="center">
+      <el-table-column fixed="right" label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-button @click="showOrderInfo(scope.row)" type="text" size="small"
             >查看</el-button
           >
+          <el-button v-if="scope.row.isPay === 2" type="text" size="small" @click="applyRefund(scope.row)"
+          >确认退款</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -142,15 +144,29 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="orderTableDialogVisible = false"
-          >关 闭</el-button
-        >
+          >关 闭</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      width="30%"
+      :show-close="false"
+      :visible="refuseDialogVisible"
+    >
+          <el-input
+            v-model="refuseReason"
+            placeholder="请输入拒绝理由"
+            autocomplete="off"
+          ></el-input>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="doApplyRefund(refuseOrderId,0)"
+          >确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { queryOrderList } from "../../api/api";
+import { queryOrderList,confirmRefund } from "../../api/api";
 export default {
   name: "tableManage",
 
@@ -160,6 +176,7 @@ export default {
       pageTotal: 0,
       currentPage: 1,
       pageSize: 10,
+      formLabelWidth: "120px",
       orderTableDialogVisible: false,
       orderTableForm: {
         tableName: "",
@@ -167,6 +184,9 @@ export default {
         orderDate: "",
         isPay: "",
       },
+      refuseDialogVisible:false,
+      refuseOrderId:'',
+      refuseReason:'',
     };
   },
   created() {
@@ -187,6 +207,31 @@ export default {
       }
     },
 
+    async applyRefund(row){
+          this.$confirm('确认退款？',  {
+          distinguishCancelAndClose: true,
+          confirmButtonText: '确定',
+          cancelButtonText: '拒绝',
+          type: 'warning'
+        }).then(res=>{
+            this.doApplyRefund(row.id,1)
+            this.getOrderList()
+        }).catch(()=>{
+          this.refuseOrderId = row.id
+          this.refuseDialogVisible = true
+        })
+    },
+    async doApplyRefund(id,confirmStatus){
+      const params = {orderId: id,isConfirm:confirmStatus,refuseReason: confirmStatus === 0 ? this.refuseReason : null}
+          const res = await confirmRefund(params);
+          if(res.code === "00000"){
+            this.$message.success("操作成功")
+            this.getOrderList()
+            if (confirmStatus === 0) return this.refuseDialogVisible = false
+          }else {
+            this.$message.error(res.msg);
+          }
+    },
     handleSizeChange(val) {
       this.pageSize = val;
       this.getOrderList();

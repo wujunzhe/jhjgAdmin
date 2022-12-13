@@ -144,11 +144,11 @@
       <el-card class="box-card">
         <div v-for="item in offTableForm" :key="item.id" class="text item">
           <el-col :span="8">
-            <span>日期</span>
+            <span>日期: </span>
             <span>{{ item.orderDate }}</span>
           </el-col>
           <el-col :span="8">
-            <span>时间段</span>
+            <span>时间段: </span>
             <span>{{ item.orderTypeId | getTimeType }}</span></el-col
           >
           <el-col :span="8">
@@ -336,6 +336,7 @@ export default {
       }
     },
 
+    /** 启用餐桌 */
     async enableTable(item) {
       const params = {
         tableId: item.tableId,

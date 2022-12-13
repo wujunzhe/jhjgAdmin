@@ -37,6 +37,9 @@ const enableTable = params => post('/order/table/enable', params);
 /** 刷新权限 */
 const refreshAuth = params => get('/refreshApi', params);
 
+/** 确认退款 */
+const confirmRefund = params => post('/order/order/confirmRefund', params);
+
 export {
     loginReq,
     queryTableList,
@@ -48,5 +51,6 @@ export {
     refreshAuth,
     disableTable,
     getTableOffList,
-    enableTable
+    enableTable,
+    confirmRefund
 }
